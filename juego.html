@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Adivino tu personaje</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface": "#191c1e",
+            "primary": "#7c3aed",
+            "on-secondary-container": "#006172",
+            "secondary-fixed": "#acedff",
+            "on-primary-fixed-variant": "#5a00c6",
+            "secondary-container": "#57dffe",
+            "surface-tint": "#8b5cf6",
+            "inverse-primary": "#d2bbff",
+            "on-primary-container": "#ede0ff",
+            "primary-fixed-dim": "#d2bbff",
+            "on-tertiary-fixed-variant": "#85145a",
+            "on-tertiary-container": "#ffdce9",
+            "surface-container-highest": "#e0e3e5",
+            "background": "#1a122d",
+            "on-secondary-fixed": "#001f26",
+            "secondary": "#00687a",
+            "on-primary-fixed": "#25005a",
+            "primary-fixed": "#eaddff",
+            "surface-container-high": "#e6e8ea",
+            "surface-container": "#ede9fe",
+            "on-tertiary-fixed": "#3d0026",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface-bright": "#fdfaff",
+            "on-primary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "surface-variant": "#e0e3e5",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "tertiary": "#8f1e62",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#4cd7f6",
+            "outline-variant": "#ccc3d8",
+            "surface-dim": "#d8dadc",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#eff1f3",
+            "on-surface-variant": "#4a4455",
+            "tertiary-fixed-dim": "#ffafd3",
+            "outline": "#7b7487",
+            "inverse-surface": "#2d3133",
+            "surface": "#1a122d",
+            "surface-container-low": "#f2f4f6",
+            "on-background": "#fdfaff",
+            "tertiary-fixed": "#ffd8e7",
+            "primary-container": "#8b5cf6",
+            "tertiary-container": "#ae397b",
+            "on-secondary-fixed-variant": "#004e5c"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "xl": "80px",
+            "gutter": "24px",
+            "lg": "48px",
+            "base": "8px",
+            "sm": "12px",
+            "xs": "4px",
+            "md": "24px",
+            "container-max": "1200px"
+          },
+          "fontFamily": {
+            "label-lg": ["Be Vietnam Pro"],
+            "label-sm": ["Be Vietnam Pro"],
+            "body-lg": ["Be Vietnam Pro"],
+            "body-md": ["Be Vietnam Pro"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "display-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-xl": ["Be Vietnam Pro"],
+            "display-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-lg": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+            "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+            "headline-lg": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }],
+            "display-md": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-xl": ["20px", { "lineHeight": "1.6", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .character-card {
+      overflow: hidden;
+    }
+
+    .character-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .character-card:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
+      border-color: rgba(124, 58, 237, 0.6);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .mystic-gradient {
+      background:
+        radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(219, 39, 119, 0.25) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.25) 0%, transparent 40%),
+        radial-gradient(circle at 20% 90%, rgba(139, 92, 246, 0.3) 0%, transparent 40%),
+        #1a122d;
+    }
+
+    .abstract-orb {
+      position: fixed;
+      filter: blur(140px);
+      z-index: -1;
+      opacity: 0.6;
+      animation: float 25s infinite ease-in-out alternate;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(120px, 80px) rotate(15deg);
+      }
+    }
+
+    .active-tab {
+      background: #7c3aed;
+      color: white;
+      box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.4);
+    }
+
+    .hardcore-tab {
+      background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+      color: white;
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 15px rgba(124, 58, 237, 0.5);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 30px rgba(219, 39, 119, 0.7);
+        transform: scale(1.02);
+      }
+    }
+
+    /* Grid for Gallery */
+    .character-row-16 {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .character-row-64 {
+      display: grid;
+      grid-template-columns: repeat(16, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 1280px) {
+      .character-row-64 {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .character-row-64 {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .character-row-16 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .character-row-64 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+      }
+    }
+
+    /* Mini Grid for Auto Mode */
+    .mini-grid-16 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-grid-64 {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .screen {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .screen.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      width: 200px;
+    }
+
+    .btn-no {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: white;
+      width: 200px;
+    }
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background font-body-md text-white mystic-gradient min-h-screen selection:bg-primary-container selection:text-white">
+  <canvas id="confetti"></canvas>
+
+  <!-- Background Decoration -->
+  <div class="abstract-orb w-[700px] h-[700px] bg-primary top-[-15%] left-[-15%] rounded-full"></div>
+  <div class="abstract-orb w-[900px] h-[900px] bg-secondary-container bottom-[-15%] right-[-15%] rounded-full"></div>
+  <div class="abstract-orb w-[500px] h-[500px] bg-tertiary top-[40%] left-[35%] rounded-full"></div>
+
+  <!-- TopAppBar -->
+  <header
+    class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-[#1a122d]/40 backdrop-blur-3xl border-b border-primary/20 shadow-lg shadow-black/30 font-['Plus_Jakarta_SANS'] text-base antialiased">
+    <div class="flex items-center gap-4">
+      <span class="text-2xl font-black tracking-tight text-white cursor-pointer" onclick="goToHome()">Adivino</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-white/60 font-black tracking-widest text-sm mr-2">ADAM.AI</span>
+    </div>
+  </header>
+
+  <main class="pt-32 pb-40 px-8 max-w-[1700px] mx-auto">
+    <!-- Title Section -->
+    <div class="text-center mb-16 space-y-6">
+      <h1 class="font-display-lg text-display-lg text-white tracking-tight">Adivino tu personaje</h1>
+      <p class="font-body-xl text-body-xl text-white/70 max-w-2xl mx-auto" id="subtitle">
+        Elige un personaje en tu mente. Haré algunas preguntas mágicas para descubrir quién es. ¿Estás listo para el
+        desafío?
+      </p>
+
+      <!-- Tab Navigation Bar -->
+      <div class="flex justify-center mt-10" id="tabs-container">
+        <div class="glass-card p-1.5 rounded-2xl flex gap-2 border-white/10 bg-white/5">
+          <button id="tab-16"
+            class="px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/10 text-white/60"
+            onclick="selectMode(16)">16 personajes</button>
+          <button id="tab-64"
+            class="px-8 py-2.5 rounded-xl font-extrabold text-sm transition-all duration-300 flex items-center gap-2 hover:bg-white/10 text-white/60"
+            onclick="selectMode(64)">
+            <span class="material-symbols-outlined text-[18px]">bolt</span>
+            HARDCORE 64 PERSONAJES
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main dynamic application element -->
+    <div id="app"></div>
+  </main>
+
+  <script>
+    const state = {
+      totalMode: 16,
+      playStyle: 'auto',
+      round: 0,
+      score: 0
+    };
+
+    const app = document.getElementById('app');
+    const subtitle = document.getElementById('subtitle');
+    const tab16 = document.getElementById('tab-16');
+    const tab64 = document.getElementById('tab-64');
+    const tabsContainer = document.getElementById('tabs-container');
+
+    function hide(el) { el.style.display = 'none'; }
+    function show(el) { el.style.display = 'flex'; }
+
+    function goToHome() {
+      show(tabsContainer);
+      selectMode(16); // Default 16 on start
+    }
+
+    function selectMode(total) {
+      state.totalMode = total;
+      // Update Tabs style
+      if (total === 16) {
+        tab16.className = "px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 active-tab";
+        tab64.className = "px-8 py-2.5 rounded-xl font-extrabold text-sm transition-all duration-300 text-white/60 hover:bg-white/10 flex items-center gap-2";
+      } else {
+        tab16.className = "px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 text-white/60 hover:bg-white/10";
+        tab64.className = "px-8 py-2.5 rounded-xl font-extrabold text-sm transition-all duration-300 hardcore-tab flex items-center gap-2";
+      }
+      goToGallery();
+    }
+
+    function goToGallery() {
+      subtitle.innerHTML = "Elige un personaje en tu mente. Haré algunas preguntas mágicas para descubrir quién es. ¿Estás listo para el desafío?";
+
+      let clsName = state.totalMode === 16 ? 'character-row-16' : 'character-row-64 max-w-[1280px] mx-auto';
+      let gridHTML = `<div class="${clsName}">`;
+
+      let fontSize = state.totalMode === 16 ? "text-[16px] px-2" : "text-[12px] px-1.5";
+
+      for (let i = 1; i <= state.totalMode; i++) {
+        gridHTML += `
+              <div class="character-card glass-card aspect-square rounded-xl transition-all duration-500 relative flex items-center justify-center group bg-white/5">
+                  <img src="imagenes/${i}.png" onerror="this.outerHTML='<span class=&quot;text-white/20 font-bold text-2xl&quot;>#${i}</span>'" alt="pj" />
+                  <span class="absolute top-2 right-2 ${fontSize} font-bold text-white drop-shadow-md bg-black/60 rounded-md py-0.5 font-['Plus_Jakarta_Sans']" style="backdrop-filter: blur(4px);">${i}</span>
+              </div>
+          `;
+      }
+      gridHTML += `</div>`;
+
+      app.innerHTML = `
+          <div class="screen active">
+              ${gridHTML}
+              <div class="flex justify-center mt-12 mb-8">
+                  <button class="btn active-tab shadow-lg shadow-primary/30" onclick="goToStyleSelect()">¡SÍ, LO TENGO!</button>
+              </div>
+          </div>
+      `;
+    }
+
+    function goToStyleSelect() {
+      hide(tabsContainer);
+      subtitle.innerHTML = "¿Cómo quieres que lo adivine? Elige el estilo de juego.";
+
+      app.innerHTML = `
+          <div class="screen active flex flex-col md:flex-row justify-center gap-6 max-w-4xl mx-auto mt-12 mb-10">
+                <!-- Modo Automático -->
+                <div class="glass-card p-10 rounded-3xl flex-1 flex flex-col items-center text-center">
+                    <span class="material-symbols-outlined text-[48px] text-secondary-container mb-4 drop-shadow-lg">smart_toy</span>
+                    <h3 class="font-headline-lg text-2xl mb-4 text-white">Automático</h3>
+                    <p class="text-white/60 mb-8 flex-1 leading-relaxed">
+                        Te haré ${Math.log2(state.totalMode)} sencillas preguntas de SÍ o NO, y el sistema adivinará al vuelo en quién estás pensando.
+                    </p>
+                    <button class="btn bg-[#7c3aed] text-white w-full hover:bg-[#6d28d9]" onclick="startGame('auto')">MODO AUTO</button>
+                </div>
+                <!-- Modo Manual -->
+                <div class="glass-card p-10 rounded-3xl flex-1 flex flex-col items-center text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-tertiary/20 to-transparent pointer-events-none"></div>
+                    <span class="material-symbols-outlined text-[48px] text-tertiary mb-4 drop-shadow-lg relative z-10">psychology</span>
+                    <h3 class="font-headline-lg text-2xl mb-4 text-white hover:z-10 relative z-10">Modo Manual</h3>
+                    <p class="text-white/60 mb-8 flex-1 leading-relaxed relative z-10">
+                        Te mostraré unas tarjetas. ¡Demuestra tu agilidad mental!
+                    </p>
+                    <button class="btn btn-secondary w-full relative z-10 border-white/20 hover:bg-white/10" onclick="startGame('manual')">MODO MANUAL</button>
+                </div>
+          </div>
+          <div class="flex justify-center">
+              <button class="text-white/50 hover:text-white transition-colors underline flex items-center gap-2 font-medium" onclick="goToHome()">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span> Volver a elegir dificultad
+              </button>
+          </div>
+      `;
+    }
+
+    function getCardMembers(bitValue) {
+      const members = [];
+      for (let i = 0; i < state.totalMode; i++) {
+        if ((i + 1) & bitValue) members.push(i + 1);
+      }
+      return members;
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function renderMiniGrid(members) {
+      const cls = state.totalMode === 16 ? 'mini-grid-16' : 'mini-grid-64';
+      let html = `<div class="${cls}">`;
+      let fontSize = state.totalMode === 16 ? "text-[14px]" : "text-[10px]";
+
+      // Shuffle all except the first one (chuleta)
+      const first = members[0];
+      const rest = members.slice(1);
+      shuffleArray(rest);
+      const shuffledMembers = [first, ...rest];
+
+      shuffledMembers.forEach(num => {
+        html += `
+          <div class="glass-card aspect-square rounded-lg relative overflow-hidden flex items-center justify-center bg-white/5 border-white/10">
+              <img src="imagenes/${num}.png" class="w-full h-full object-cover" onerror="this.outerHTML='<span class=&quot;text-white/30 font-bold&quot;>${num}</span>'"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <span class="absolute bottom-1 right-2 ${fontSize} font-bold text-white drop-shadow-md py-0.5">${num}</span>
+          </div>
+          `;
+      });
+      html += `</div>`;
+      return html;
+    }
+
+    function startGame(style) {
+      state.playStyle = style;
+      state.round = 0;
+      state.score = 0;
+
+      if (style === 'auto') {
+        renderAutoRound();
+      } else {
+        renderManualGame();
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function renderAutoRound() {
+      const bits = Math.log2(state.totalMode);
+      if (state.round >= bits) {
+        showReveal(state.score);
+        return;
+      }
+      const value = Math.pow(2, state.round);
+      const members = getCardMembers(value);
+
+      subtitle.innerHTML = `<span class="text-primary font-bold">Pregunta ${state.round + 1} de ${bits}</span> • Céntrate en tu personaje`;
+
+      app.innerHTML = `
+          <div class="screen active max-w-4xl mx-auto mt-8 mb-20 fade-in">
+              <div class="glass-card p-6 md:p-8 rounded-3xl mb-8 relative border-primary/40 shadow-xl shadow-primary/10 bg-white/5">
+                  <h2 class="text-center font-headline-lg text-2xl text-white mb-8 tracking-tight">
+                      ¿Aparece tu personaje en este tablero?
+                  </h2>
+                  ${renderMiniGrid(members)}
+              </div>
+              <div class="flex justify-center gap-6">
+                  <button class="btn btn-yes text-xl shadow-xl shadow-green-500/20" onclick="answerAuto(true, ${value})">SÍ</button>
+                  <button class="btn btn-no text-xl shadow-xl shadow-red-500/20" onclick="answerAuto(false, 0)">NO</button>
+              </div>
+          </div>
+      `;
+    }
+
+    window.answerAuto = function (isYes, value) {
+      if (isYes) state.score += value;
+      state.round++;
+      renderAutoRound();
+    }
+
+    function renderManualGame() {
+      const bits = Math.log2(state.totalMode);
+      subtitle.innerHTML = "Pulsa en tu personaje si aparece en la tarjeta o usa tu mente.";
+
+      let cardsHTML = `<div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto mt-8">`;
+      for (let b = 0; b < bits; b++) {
+        const value = Math.pow(2, b);
+        const members = getCardMembers(value);
+        cardsHTML += `
+                <div class="glass-card p-6 rounded-3xl border-secondary-container/20 hover:border-secondary-container/50 transition-colors">
+                    <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                        <span class="font-headline-md text-white/70">Tarjeta ${b + 1}</span>
+                    </div>
+                    ${renderMiniGrid(members)}
+                </div>
+          `;
+      }
+      cardsHTML += `</div>`;
+
+      app.innerHTML = `
+          <div class="screen active mb-20">
+              ${cardsHTML}
+                <div class="max-w-md mx-auto mt-16 glass-card p-8 rounded-3xl text-center border-tertiary/40">
+                    <h3 class="font-headline-md text-xl mb-6 text-white tracking-tight">¿Qué número tiene tu personaje?</h3>
+                    <div class="flex items-center gap-4 justify-center">
+                        <input type="number" id="manualInput" min="1" max="${state.totalMode}" placeholder="Número" 
+                            class="bg-black/40 border border-primary/50 text-white px-4 py-3 rounded-xl text-center text-xl w-32 focus:outline-none focus:ring-2 focus:ring-primary font-bold"
+                            onkeydown="if(event.key==='Enter') revealManual()" />
+                      <button class="btn active-tab shadow-lg shadow-primary/30 text-base" onclick="revealManual()">REVELAR</button>
+                  </div>
+              </div>
+              <div class="mt-8 text-center">
+                  <button class="text-white/50 hover:text-white transition-colors underline bg-transparent" onclick="goToStyleSelect()">← Cambiar Estilo</button>
+              </div>
+          </div>
+      `;
+    }
+
+    window.revealManual = function () {
+      const val = parseInt(document.getElementById('manualInput').value);
+      if (!val || val < 1 || val > state.totalMode) {
+        alert("Introduce el número que has sumado, entre 1 y " + state.totalMode);
+        return;
+      }
+      showReveal(val);
+    }
+
+    function showReveal(finalNum) {
+      if (finalNum === 0) finalNum = state.totalMode;
+      hide(tabsContainer);
+      subtitle.innerHTML = `<span class="text-secondary-container font-bold text-xl">¡Tu mente ha sido leída!</span>`;
+
+      let content = '';
+      if (typeof finalNum === 'number') {
+        content = `
+              <div class="relative inline-block mt-4 mb-6 group">
+                  <div class="absolute inset-[-4px] bg-gradient-to-r from-primary to-secondary-container rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <img src="imagenes/${finalNum}.png" class="relative w-56 h-56 md:w-64 md:h-64 object-cover rounded-3xl border-4 border-white/10" onerror="this.outerHTML='<div class=&quot;fallback-avatar w-64 h-64 rounded-3xl flex items-center justify-center font-bold text-3xl text-white/30&quot;><span>#${finalNum}</span></div>'"/>
+              </div>
+              <h2 class="font-display-lg text-4xl text-white mt-4 drop-shadow-md">
+                  Personaje <span class="text-primary">#${finalNum}</span>
+              </h2>
+          `;
+      } else {
+        content = `<h2 class="font-display-lg text-3xl text-white mt-10">${finalNum}</h2>`;
+      }
+
+      app.innerHTML = `
+          <div class="screen active text-center mt-12 mb-20 fade-in">
+              <div class="max-w-xl mx-auto glass-card p-10 rounded-[40px] border-primary/50 bg-[#1a122d]/60 shadow-2xl shadow-primary/20">
+                  ${content}
+              </div>
+              <div class="flex justify-center gap-6 mt-12">
+                  <button class="btn active-tab shadow-lg shadow-primary/30 text-lg px-8 py-4" onclick="startGame(state.playStyle)">VOLVER A JUGAR</button>
+                  <button class="btn btn-secondary border-white/20 hover:bg-white/10 text-lg px-8 py-4" onclick="goToHome()">MENU PRINCIPAL</button>
+              </div>
+          </div>
+      `;
+      fireConfetti();
+    }
+
+    function fireConfetti() {
+      const c = document.getElementById('confetti');
+      const ctx = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      const pieces = [];
+      const colors = ['#7c3aed', '#57dffe', '#d2bbff', '#db2777', '#ffffff'];
+      for (let i = 0; i < 200; i++) pieces.push({
+        x: Math.random() * c.width, y: -Math.random() * c.height,
+        w: Math.random() * 12 + 6, h: Math.random() * 12 + 6,
+        c: colors[Math.floor(Math.random() * colors.length)],
+        r: Math.random() * 360, s: Math.random() * 4 + 3
+      });
+      let frame = 0;
+      function loop() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        let active = false;
+        pieces.forEach(p => {
+          if (p.y < c.height) {
+            p.y += p.s; p.r += 2;
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r * Math.PI / 180);
+            ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+            active = true;
+          }
+        });
+        if (active && frame < 350) { frame++; requestAnimationFrame(loop); }
+        else ctx.clearRect(0, 0, c.width, c.height);
+      }
+      loop();
+    }
+
+    // Init
+    goToHome();
+
+  </script>
+</body>
+
+</html>
